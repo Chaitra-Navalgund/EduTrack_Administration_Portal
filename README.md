@@ -65,6 +65,23 @@ This repository includes:
 gunicorn student_enrollment.wsgi:application
 ```
 
+## Create the first admin login
+
+This project uses its own `users` table, not Django's built-in admin user model.
+After deploying and running migrations, create the first login account from the Render shell:
+
+```bash
+python manage.py create_admin_user --name "Admin User" --email "admin@example.com" --username "adminuser" --password "StrongPass123" --status active
+```
+
+Then log in from:
+
+```text
+/admin_login/
+```
+
+If you run the command again with the same username, it updates that existing user.
+
 ## Important note about the database
 
 This project was originally connected to a local MySQL database.
