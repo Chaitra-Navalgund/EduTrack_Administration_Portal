@@ -79,7 +79,7 @@
                     <td>
                         <div class="d-flex align-items-center">
                             {% if admin.photo %}
-                                <img src="{% static 'images/' %}{{ admin.photo }}" class="admin-thumb mr-3">
+                                <img src="{{ MEDIA_URL }}{{ admin.photo }}" class="admin-thumb mr-3">
                             {% else %}
                                 <img src="{% static 'images/default_user.png' %}" class="admin-thumb mr-3">
                             {% endif %}

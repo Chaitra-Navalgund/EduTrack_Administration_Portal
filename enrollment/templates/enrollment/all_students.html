@@ -180,7 +180,7 @@
                 <tr>
                   <td class="text-muted font-weight-600">{{ forloop.counter }}</td>
                   <td>
-                    <img class="student-thumb" src="{% static 'images/' %}{{ student.photo }}" alt="{{ student.name }}">
+                    <img class="student-thumb" src="{{ MEDIA_URL }}{{ student.photo }}" alt="{{ student.name }}">
                   </td>
                   <td>
                     <div class="font-weight-700 color-primary">{{ student.name }}</div>

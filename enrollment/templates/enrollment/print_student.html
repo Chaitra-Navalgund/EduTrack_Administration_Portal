@@ -89,7 +89,7 @@
         <div class="row">
             <div class="col-4 text-center">
                 {% if student.photo %}
-                    <img src="{% static 'images/' %}{{ student.photo }}" class="student-photo" alt="Photo">
+                    <img src="{{ MEDIA_URL }}{{ student.photo }}" class="student-photo" alt="Photo">
                 {% else %}
                     <div class="student-photo bg-light d-flex align-items-center justify-content-center">
                         <span class="small text-muted">PHOTO N/A</span>

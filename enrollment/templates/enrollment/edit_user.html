@@ -52,7 +52,7 @@
                         <input type="file" name="photo" class="form-control-file" id="photo">
                         {% if user_to_edit.photo %}
                         <div class="mt-2">
-                            <img src="{% static 'images/' %}{{ user_to_edit.photo }}" height="60px" class="img-thumbnail">
+                            <img src="{{ MEDIA_URL }}{{ user_to_edit.photo }}" height="60px" class="img-thumbnail">
                         </div>
                         {% endif %}
                     </div>

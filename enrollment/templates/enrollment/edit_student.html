@@ -141,7 +141,7 @@
                         <div class="d-flex align-items-center">
                             {% if student.photo %}
                             <div class="current-photo-wrapper mr-4">
-                                <img src="{% static 'images/' %}{{ student.photo }}" class="current-photo-img" alt="Current">
+                                <img src="{{ MEDIA_URL }}{{ student.photo }}" class="current-photo-img" alt="Current">
                                 <span class="photo-label">Current Photo</span>
                             </div>
                             {% endif %}

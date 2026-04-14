@@ -95,7 +95,7 @@
                 <div class="profile-identity-card">
                     <div class="profile-avatar-wrapper">
                         {% if user.photo %}
-                        <img src="{% static 'images/' %}{{ user.photo }}" alt="{{ user.name }}" class="profile-avatar">
+                        <img src="{{ MEDIA_URL }}{{ user.photo }}" alt="{{ user.name }}" class="profile-avatar">
                         {% else %}
                         <img src="{% static 'images/default_user.png' %}" alt="Default" class="profile-avatar">
                         {% endif %}

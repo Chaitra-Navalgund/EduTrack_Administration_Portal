@@ -266,7 +266,7 @@
               <span class="badge-academic">{{ student.class_field }}</span>
               <h2 class="text-white mb-0 font-weight-700">Student Identity</h2>
               <div class="profile-img-container">
-                <img class="profile-img" src="{% static 'images/' %}{{ student.photo }}" alt="{{ student.name }}">
+                <img class="profile-img" src="{{ MEDIA_URL }}{{ student.photo }}" alt="{{ student.name }}">
               </div>
             </div>
             <div class="profile-body">

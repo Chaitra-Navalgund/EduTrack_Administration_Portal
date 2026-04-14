@@ -173,7 +173,7 @@
         <div class="col-md-4 animate__animated animate__fadeInUp" style="animation-delay: 0.3s;">      
           <div class="stat-card profile">
             <div class="profile-mini mb-3">
-              <img src="{% static 'images/' %}{{ user.photo }}" alt="Admin Profile">             
+              <img src="{{ MEDIA_URL }}{{ user.photo }}" alt="Admin Profile">             
               <div>
                 <div class="admin-badge mb-1">Super Admin</div>
                 <div class="h5 font-weight-700 mb-0 text-white">{{ user.name }}</div>
