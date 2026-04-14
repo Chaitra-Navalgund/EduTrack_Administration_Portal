@@ -68,19 +68,22 @@ gunicorn student_enrollment.wsgi:application
 ## Create the first admin login
 
 This project uses its own `users` table, not Django's built-in admin user model.
-After deploying and running migrations, create the first login account from the Render shell:
 
-```bash
-python manage.py create_admin_user --name "Admin User" --email "admin@example.com" --username "adminuser" --password "StrongPass123" --status active
-```
+On Render free instances, Shell access is not available, so the first admin user can be created automatically during deployment.
+Add these environment variables in your Render web service:
+
+- `ADMIN_NAME`
+- `ADMIN_EMAIL`
+- `ADMIN_USERNAME`
+- `ADMIN_PASSWORD`
+
+During the build, `build.sh` will automatically run the custom management command and create or update that login user.
 
 Then log in from:
 
 ```text
 /admin_login/
 ```
-
-If you run the command again with the same username, it updates that existing user.
 
 ## Important note about the database
 

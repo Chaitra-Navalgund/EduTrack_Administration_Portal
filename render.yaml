@@ -13,3 +13,11 @@ services:
         value: "True"
       - key: DJANGO_SECRET_KEY
         generateValue: true
+      - key: ADMIN_NAME
+        value: "Admin User"
+      - key: ADMIN_EMAIL
+        value: "admin@example.com"
+      - key: ADMIN_USERNAME
+        value: "adminuser"
+      - key: ADMIN_PASSWORD
+        sync: false
