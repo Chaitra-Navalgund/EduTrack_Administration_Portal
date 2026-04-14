@@ -1,0 +1,241 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+      :root {
+        --primary: #0f172a;
+        --primary-light: #1e293b;
+        --secondary: #3b82f6;
+        --accent: #fbbf24;
+        --bg-color: #f8fafc;
+        --text-main: #1e293b;
+        --text-muted: #64748b;
+        --glass: rgba(255, 255, 255, 0.8);
+        --glass-dark: rgba(15, 23, 42, 0.9);
+        --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+        --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      body {
+        font-family: 'Outfit', sans-serif;
+        background-color: var(--bg-color);
+        color: var(--text-main);
+        overflow-x: hidden;
+      }
+
+      /* Scrollbar */
+      ::-webkit-scrollbar { width: 8px; }
+      ::-webkit-scrollbar-track { background: var(--bg-color); }
+      ::-webkit-scrollbar-thumb { background: var(--secondary); border-radius: 10px; }
+
+      .navbar {
+        background: var(--glass-dark);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        padding: 1rem 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        transition: var(--transition);
+      }
+      
+      .navbar-brand {
+        font-weight: 800;
+        font-size: 1.5rem;
+        letter-spacing: -0.5px;
+        color: white !important;
+      }
+      
+      .navbar-brand span {
+        color: var(--accent);
+      }
+
+      .nav-link {
+        font-weight: 500;
+        color: rgba(255, 255, 255, 0.8) !important;
+        margin: 0 10px;
+        transition: var(--transition);
+      }
+
+      .nav-link:hover {
+        color: var(--accent) !important;
+        transform: translateY(-2px);
+      }
+
+      .btn-auth {
+        background: var(--secondary);
+        color: white !important;
+        border-radius: 12px;
+        font-weight: 600;
+        padding: 0.6rem 1.5rem;
+        border: none;
+        box-shadow: 0 4px 14px 0 rgba(59, 130, 246, 0.39);
+        transition: var(--transition);
+      }
+
+      .btn-auth:hover {
+        background: #2563eb;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(59, 130, 246, 0.45);
+      }
+
+      .footer {
+        background-color: var(--primary);
+        color: white;
+        padding: 4rem 0 2rem;
+        margin-top: 5rem;
+        border-top: 5px solid var(--accent);
+      }
+
+      .footer h5 {
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        color: var(--accent);
+      }
+
+      .footer-link {
+        color: #94a3b8;
+        text-decoration: none;
+        transition: var(--transition);
+        display: block;
+        margin-bottom: 0.5rem;
+      }
+
+      .footer-link:hover {
+        color: white;
+        padding-left: 5px;
+      }
+
+      .social-icons a {
+        color: white;
+        font-size: 1.2rem;
+        margin-right: 15px;
+        transition: var(--transition);
+      }
+
+      .social-icons a:hover {
+        color: var(--accent);
+        transform: scale(1.2);
+      }
+
+      .copyright {
+        margin-top: 3rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        color: #64748b;
+        font-size: 0.9rem;
+      }
+
+      {% block extra_css %}{% endblock %}
+    </style>
+    <title>{% block title %}Student Enrollment System{% endblock %}</title>
+  </head>
+  <body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+      <div class="container">
+        <a class="navbar-brand" href="{% url 'index' %}">
+          <i class="fas fa-graduation-cap mr-2"></i>Edu<span>Track</span>
+        </a>
+        <button class="navbar-toggler border-0" type="button" data-toggle="collapse" data-target="#navbarNav">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ml-auto align-items-center">
+            {% if request.session.admin_logged_in %}
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'dashboard' %}"><i class="fas fa-grid-2 mr-1"></i> Dashboard</a>
+            </li>
+            <li class="nav-item">
+               <a class="btn btn-danger btn-sm ml-lg-3 px-4 mt-2 mt-lg-0" style="border-radius: 12px; font-weight: 600;" href="{% url 'admin_logout' %}">
+                 <i class="fas fa-sign-out-alt mr-1"></i> Logout
+               </a>
+            </li>
+            {% else %}
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'index' %}"><i class="fas fa-home mr-1"></i> Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="btn btn-auth ml-lg-3 mt-2 mt-lg-0" href="{% url 'admin_login' %}">
+                <i class="fas fa-user-shield mr-2"></i>Admin Portal
+              </a>
+            </li>
+            {% endif %}
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <main>
+      {% block content %}
+      {% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-4 mb-4 mb-lg-0">
+            <a class="navbar-brand mb-3 d-inline-block" href="{% url 'index' %}">
+              <i class="fas fa-graduation-cap mr-2"></i>Edu<span>Track</span>
+            </a>
+            <p class="text-muted">Empowering education through seamless student data management and enrollment solutions.</p>
+            <div class="social-icons mt-4">
+              <a href="#"><i class="fab fa-facebook-f"></i></a>
+              <a href="#"><i class="fab fa-twitter"></i></a>
+              <a href="#"><i class="fab fa-linkedin-in"></i></a>
+              <a href="#"><i class="fab fa-instagram"></i></a>
+            </div>
+          </div>
+          <div class="col-6 col-lg-2 offset-lg-2 mb-4 mb-lg-0">
+            <h5>Quick Links</h5>
+            <a href="{% url 'index' %}" class="footer-link">Home</a>
+            <a href="{% url 'admin_login' %}" class="footer-link">Admin Login</a>
+            <a href="#" class="footer-link">Contact Us</a>
+            <a href="#" class="footer-link">Privacy Policy</a>
+          </div>
+          <div class="col-6 col-lg-2 mb-4 mb-lg-0">
+            <h5>Resources</h5>
+            <a href="#" class="footer-link">Documentation</a>
+            <a href="#" class="footer-link">Help Center</a>
+            <a href="#" class="footer-link">Academic Calendar</a>
+            <a href="#" class="footer-link">Student Portal</a>
+          </div>
+          <div class="col-lg-2">
+            <h5>Contact</h5>
+            <p class="text-muted small mb-1"><i class="fas fa-envelope mr-2"></i>info@edutrack.com</p>
+            <p class="text-muted small mb-1"><i class="fas fa-phone mr-2"></i>+1 (555) 000-1111</p>
+            <p class="text-muted small"><i class="fas fa-map-marker-alt mr-2"></i>123 Education St, NY</p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12 text-center copyright">
+            <p>&copy; 2024 EduTrack Student Enrollment System. All rights reserved.</p>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="{% static 'js/jquery-3.5.1.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script>
+      $(window).scroll(function() {
+        if ($(this).scrollTop() > 50) {
+          $('.navbar').css('padding', '0.5rem 0');
+        } else {
+          $('.navbar').css('padding', '1rem 0');
+        }
+      });
+    </script>
+    {% block extra_js %}{% endblock %}
+  </body>
+</html>

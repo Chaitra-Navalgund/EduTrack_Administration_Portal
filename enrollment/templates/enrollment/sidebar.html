@@ -1,0 +1,68 @@
+<style>
+    .sidebar-menu {
+        border-radius: 20px;
+        overflow: hidden;
+        border: 1px solid #e2e8f0;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        background: white;
+    }
+    .sidebar-item {
+        padding: 1rem 1.5rem;
+        border: none;
+        border-bottom: 1px solid #f1f5f9;
+        color: var(--text-main);
+        font-weight: 500;
+        transition: var(--transition);
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+    }
+    .sidebar-item:last-child {
+        border-bottom: none;
+    }
+    .sidebar-item i {
+        width: 25px;
+        margin-right: 15px;
+        font-size: 1.1rem;
+        color: var(--text-muted);
+        transition: var(--transition);
+    }
+    .sidebar-item:hover {
+        background: #f8fafc;
+        color: var(--secondary);
+        padding-left: 2rem;
+        text-decoration: none;
+    }
+    .sidebar-item:hover i {
+        color: var(--secondary);
+        transform: scale(1.2);
+    }
+    .sidebar-item.active {
+        background: var(--primary);
+        color: white;
+    }
+    .sidebar-item.active i {
+        color: var(--accent);
+    }
+</style>
+
+<div class="sidebar-menu mb-4">
+    <a href="{% url 'dashboard' %}" class="sidebar-item {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+        <i class="fas fa-th-large"></i> Dashboard
+    </a>
+    <a href="{% url 'add_student' %}" class="sidebar-item {% if request.resolver_match.url_name == 'add_student' %}active{% endif %}">
+        <i class="fas fa-user-plus"></i> Add Student
+    </a>
+    <a href="{% url 'all_students' %}" class="sidebar-item {% if request.resolver_match.url_name == 'all_students' %}active{% endif %}">
+        <i class="fas fa-user-friends"></i> Student Directory
+    </a>
+    <a href="{% url 'all_payments' %}" class="sidebar-item {% if request.resolver_match.url_name == 'all_payments' %}active{% endif %}">
+        <i class="fas fa-credit-card"></i> Fee Management
+    </a>
+    <a href="{% url 'admin_profile' %}" class="sidebar-item {% if request.resolver_match.url_name == 'admin_profile' %}active{% endif %}">
+        <i class="fas fa-user-circle"></i> My Profile
+    </a>
+    <a href="{% url 'all_admin' %}" class="sidebar-item {% if request.resolver_match.url_name == 'all_admin' %}active{% endif %}">
+        <i class="fas fa-user-shield"></i> Administration
+    </a>
+</div>

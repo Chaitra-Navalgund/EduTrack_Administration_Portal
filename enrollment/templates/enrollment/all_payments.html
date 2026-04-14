@@ -1,0 +1,117 @@
+{% extends 'enrollment/base.html' %}
+{% load static %}
+
+{% block title %}All Payments - Admin Dashboard{% endblock %}
+
+{% block content %}
+
+<div class="container mt-4">
+  <div class="row">
+        <div class="col-md-3">
+      {% include 'enrollment/sidebar.html' %}
+    </div>
+    <div class="col-md-9">
+        <h1 class="text-primary"><i class="fas fa-money-bill-wave"></i> All Payments <small class="text-warning">Payments List!</small></h1> 
+        <nav aria-label="breadcrumb">   
+        <ol class="breadcrumb" style="background-color: #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.05); padding: 0.75rem 1rem; border-radius: 0.25rem;">      
+            <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Dashboard</a></li>      
+            <li class="breadcrumb-item active" aria-current="page">All Payments</li>   
+        </ol> 
+        </nav>
+
+        {% if messages %}
+            {% for message in messages %}
+            <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}success{% endif %} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+            {% endfor %}
+        {% endif %}
+
+        <div class="d-flex justify-content-between mb-3">
+            <input type="text" id="searchInput" class="form-control w-25" placeholder="Search payments...">
+            <div>
+                <a href="{% url 'add_payment' %}" class="btn btn-success"><i class="fas fa-plus"></i> Add New Payment</a>
+            </div>
+        </div>
+
+        <table class="table table-striped table-hover table-bordered" id="paymentsTable">   
+        <thead class="thead-dark">     
+            <tr>       
+                <th>ID</th>
+                <th>Student Name</th>
+                <th>Course/Year</th>
+                <th>Amount</th>
+                <th>Payment Date</th>
+                <th>Method</th>
+                <th>UTR Number</th>
+                <th class="d-print-none">Actions</th>   
+            </tr>   
+        </thead>   
+        <tbody>     
+            {% for payment in payments %}
+            <tr>         
+                <td>{{ payment.id }}</td>
+                <td>{{ payment.student.name }}</td>
+                <td>{{ payment.student.class_field }}</td>
+                <td class="font-weight-bold text-success">${{ payment.amount }}</td>
+                <td>{{ payment.payment_date|date:"M d, Y" }}</td>
+                <td>
+                    {% if payment.payment_method|lower == 'cash' %}
+                        <span class="badge badge-success">{{ payment.payment_method }}</span>
+                    {% elif payment.payment_method|lower == 'credit card' or payment.payment_method|lower == 'card' %}
+                        <span class="badge badge-info">{{ payment.payment_method }}</span>
+                    {% elif payment.payment_method|lower == 'bank transfer' or payment.payment_method|lower == 'transfer' %}
+                        <span class="badge badge-primary">{{ payment.payment_method }}</span>
+                    {% else %}
+                        <span class="badge badge-secondary">{{ payment.payment_method }}</span>
+                    {% endif %}
+                </td>
+                <td>{{ payment.reference_no }}</td>
+                <td class="d-print-none">
+                <div class="btn-group" role="group">
+                    <a class="btn btn-sm btn-info" href="{% url 'print_payment' payment.id %}" target="_blank" title="Print Receipt">
+                    <i class="fa fa-print"></i>
+                    </a>
+                    <a class="btn btn-sm btn-warning" href="{% url 'edit_payment' payment.id %}">
+                    <i class="fa fa-edit"></i>
+                    </a>
+                    <form method="POST" action="{% url 'delete_payment' payment.id %}" style="display:inline;" onsubmit="return confirm('Are you sure want to delete this payment record?');">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-sm btn-danger"><i class="fas fa-trash-alt"></i></button>
+                    </form>
+                </div>
+                </td>
+            </tr>        
+            {% empty %}
+            <tr><td colspan="8" class="text-center">No payment records found</td></tr>
+            {% endfor %}
+        </tbody> 
+        </table> 
+        
+        <div class="text-right h4 text-success mt-3">
+            <strong>Total Amount Collected: </strong>${{ total|floatformat:2 }}
+        </div>
+
+
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.getElementById('searchInput').addEventListener('keyup', function () {
+        const input = this.value.toLowerCase();
+        const rows = document.querySelectorAll('#paymentsTable tbody tr');
+        rows.forEach(row => {
+            const match = Array.from(row.cells).some(cell =>
+                cell.textContent.toLowerCase().includes(input)
+            );
+            row.style.display = match ? '' : 'none';
+        });
+    });
+</script>
+{% endblock %}

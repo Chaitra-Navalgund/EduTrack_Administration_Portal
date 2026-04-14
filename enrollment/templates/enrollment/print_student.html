@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Official Profile - {{ student.name }}</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Outfit', sans-serif;
+            background-color: #f8fafc; 
+            color: #1e293b; 
+            padding: 40px 0;
+        }
+        .print-container { 
+            max-width: 800px; 
+            margin: 0 auto; 
+            background: white;
+            padding: 50px; 
+            border-radius: 20px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e2e8f0;
+            position: relative;
+        }
+        .official-seal {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            opacity: 0.1;
+            font-size: 5rem;
+        }
+        .header { 
+            text-align: center; 
+            margin-bottom: 40px; 
+            border-bottom: 4px solid #0f172a; 
+            padding-bottom: 20px; 
+        }
+        .header h2 { font-weight: 800; text-transform: uppercase; letter-spacing: 2px; }
+        .student-photo { 
+            width: 150px; 
+            height: 180px;
+            object-fit: cover;
+            border-radius: 12px;
+            border: 4px solid #f1f5f9; 
+            margin-bottom: 20px; 
+        }
+        .info-section {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .info-label { font-weight: 700; color: #64748b; font-size: 0.8rem; text-transform: uppercase; margin-bottom: 5px; }
+        .info-value { font-weight: 800; color: #0f172a; font-size: 1.1rem; }
+        .footer { 
+            margin-top: 50px; 
+            text-align: center; 
+            font-size: 0.8em; 
+            color: #94a3b8; 
+            border-top: 1px solid #e2e8f0; 
+            padding-top: 20px; 
+        }
+        @media print {
+            body { background: white; padding: 0; }
+            .no-print { display: none; }
+            .print-container { border: none; box-shadow: none; margin: 0; padding: 0; width: 100%; max-width: none; }
+            .info-section { background: transparent !important; border: 1px solid #f1f5f9; }
+        }
+    </style>
+</head>
+<body onload="window.print()">
+    <div class="no-print text-center mb-5">
+        <button class="btn btn-dark px-4" style="border-radius: 10px; font-weight: 700;" onclick="window.print()">Print Official Record</button>
+        <a class="btn btn-outline-secondary px-4 ml-2" style="border-radius: 10px; font-weight: 700;" href="{% url 'all_students' %}">Exit Viewer</a>
+    </div>
+
+    <div class="print-container">
+        <div class="official-seal">
+            <i class="fas fa-graduation-cap"></i>
+        </div>
+
+        <div class="header">
+            <h2 class="mb-0">EduTrack</h2>
+            <p class="text-muted small">OFFICIAL STUDENT ENROLLMENT RECORD</p>
+        </div>
+
+        <div class="row">
+            <div class="col-4 text-center">
+                {% if student.photo %}
+                    <img src="{% static 'images/' %}{{ student.photo }}" class="student-photo" alt="Photo">
+                {% else %}
+                    <div class="student-photo bg-light d-flex align-items-center justify-content-center">
+                        <span class="small text-muted">PHOTO N/A</span>
+                    </div>
+                {% endif %}
+                <div class="mt-3">
+                    <p class="small text-muted">STUDENT SIGNATURE</p>
+                    <div style="border-bottom: 1px solid #e2e8f0; height: 40px; width: 80%; margin: 0 auto;"></div>
+                </div>
+            </div>
+            <div class="col-8">
+                <div class="row">
+                    <div class="col-12 mb-3">
+                        <div class="info-label">Student Full Name</div>
+                        <div class="info-value" style="font-size: 1.5rem; color: #0f172a;">{{ student.name }}</div>
+                    </div>
+                    <div class="col-6 mb-3">
+                        <div class="info-label">Identification No. (Roll)</div>
+                        <div class="info-value">#{{ student.roll }}</div>
+                    </div>
+                    <div class="col-6 mb-3">
+                        <div class="info-label">Academic Level (Class)</div>
+                        <div class="info-value">{{ student.class_field }}</div>
+                    </div>
+                    <div class="col-6 mb-3">
+                        <div class="info-label">City / Origin</div>
+                        <div class="info-value">{{ student.city }}</div>
+                    </div>
+                    <div class="col-6 mb-3">
+                        <div class="info-label">Parental Contact</div>
+                        <div class="info-value">{{ student.pcontact }}</div>
+                    </div>
+                    <div class="col-12 mt-4">
+                        <div class="info-section">
+                            <div class="info-label">Official Enrollment Authentication</div>
+                            <div class="info-value small">This student was officially enrolled into our system on {{ student.datetime|date:"l, F d, Y" }} at {{ student.datetime|time:"H:i" }}.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p><strong>SECURITY NOTICE:</strong> This document is generated electronically by the EduTrack Student Management System. For validation of this record, please contact the institution directly.</p>
+            <p class="mb-0">System Version: 2.4.0 | Generated: {% now "d M Y, H:i" %}</p>
+        </div>
+    </div>
+    
+    <!-- Include FontAwesome for the seal icon if needed, though usually not for print -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
+</body>
+</html>

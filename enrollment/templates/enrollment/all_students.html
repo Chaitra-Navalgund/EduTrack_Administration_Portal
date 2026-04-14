@@ -1,0 +1,223 @@
+{% extends 'enrollment/base.html' %}
+{% load static %}
+
+{% block title %}Student Directory - EduTrack{% endblock %}
+
+{% block extra_css %}
+  .record-card {
+    border-radius: 24px;
+    border: none;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    background: white;
+  }
+  
+  .record-header {
+    padding: 1.5rem 2rem;
+    background: white;
+    border-bottom: 2px solid #f1f5f9;
+  }
+  
+  .record-header h3 {
+    font-weight: 800;
+    color: var(--primary);
+    margin: 0;
+  }
+
+  .table-container {
+    padding: 1rem;
+  }
+
+  .modern-table {
+    border-collapse: separate;
+    border-spacing: 0 10px;
+    width: 100%;
+  }
+
+  .modern-table thead th {
+    background: #f8fafc;
+    color: var(--text-muted);
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 1px;
+    border: none;
+    padding: 1.2rem 1rem;
+  }
+
+  .modern-table tbody tr {
+    background: white;
+    transition: var(--transition);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+  }
+
+  .modern-table tbody tr:hover {
+    transform: scale(1.01);
+    box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05);
+    background: #f8fafc;
+    position: relative;
+    z-index: 1;
+  }
+
+  .modern-table td {
+    padding: 1.2rem 1rem;
+    vertical-align: middle;
+    border-top: 1px solid #f1f5f9;
+    border-bottom: 1px solid #f1f5f9;
+  }
+
+  .modern-table td:first-child {
+    border-left: 1px solid #f1f5f9;
+    border-top-left-radius: 12px;
+    border-bottom-left-radius: 12px;
+  }
+
+  .modern-table td:last-child {
+    border-right: 1px solid #f1f5f9;
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
+  }
+
+  .student-thumb {
+    width: 45px;
+    height: 45px;
+    border-radius: 12px;
+    object-fit: cover;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  }
+
+  .btn-action {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 5px;
+    transition: var(--transition);
+    border: none;
+  }
+
+  .btn-view { background: #eff6ff; color: #2563eb; }
+  .btn-edit { background: #fefce8; color: #ca8a04; }
+  .btn-delete { background: #fef2f2; color: #dc2626; }
+
+  .btn-action:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  }
+
+  .badge-class {
+    padding: 4px 12px;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    font-weight: 600;
+  }
+
+  .science { background: #dcfce7; color: #166534; }
+  .commerce { background: #e0f2fe; color: #075985; }
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+  <div class="row">
+    <div class="col-lg-3">
+      {% include 'enrollment/sidebar.html' %}
+    </div>
+    <div class="col-lg-9 animate__animated animate__fadeIn">
+      
+      <!-- Filter and Status -->
+      <div class="d-flex justify-content-between align-items-center mb-4">
+          <form method="GET" class="form-inline">
+              <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text border-0 bg-white"><i class="fas fa-filter text-muted"></i></span>
+                </div>
+                <select name="class" id="class" class="form-control border-0 shadow-sm" style="border-radius: 12px; min-width: 200px;" onchange="this.form.submit()">
+                    <option value="">All Academic Levels</option>
+                    <option value="1st Year Science" {% if class_filter == '1st Year Science' %}selected{% endif %}>1st Year Science</option>
+                    <option value="2nd Year Science" {% if class_filter == '2nd Year Science' %}selected{% endif %}>2nd Year Science</option>
+                    <option value="1st Year Commerce" {% if class_filter == '1st Year Commerce' %}selected{% endif %}>1st Year Commerce</option>
+                    <option value="2nd Year Commerce" {% if class_filter == '2nd Year Commerce' %}selected{% endif %}>2nd Year Commerce</option>
+                </select>
+              </div>
+          </form>
+          <a href="{% url 'add_student' %}" class="btn btn-auth">
+            <i class="fas fa-plus mr-2"></i>New Enrollment
+          </a>
+      </div>
+
+      {% if messages %}
+            {% for message in messages %}
+            <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}success{% endif %} border-0 shadow-sm mb-4" style="border-radius:12px;">
+                <i class="fas fa-info-circle mr-2"></i> {{ message }}
+            </div>
+            {% endfor %}
+      {% endif %}
+
+      <div class="record-card">
+        <div class="record-header border-0 pb-0">
+            <h3>Student Directory</h3>
+            <p class="text-muted small">Viewing total Records</p>
+        </div>
+        
+        <div class="table-container">
+          <div class="table-responsive">
+            <table class="table modern-table">
+              <thead>
+                <tr>
+                  <th width="50">#</th>
+                  <th width="70">Photo</th>
+                  <th>Full Name</th>
+                  <th>Roll No</th>
+                  <th>Class</th>
+                  <th>City</th>
+                  <th class="text-center">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for student in students %}
+                <tr>
+                  <td class="text-muted font-weight-600">{{ forloop.counter }}</td>
+                  <td>
+                    <img class="student-thumb" src="{% static 'images/' %}{{ student.photo }}" alt="{{ student.name }}">
+                  </td>
+                  <td>
+                    <div class="font-weight-700 color-primary">{{ student.name }}</div>
+                  </td>
+                  <td><code class="font-weight-600">#{{ student.roll }}</code></td>
+                  <td>
+                    <span class="badge-class {% if 'Science' in student.class_field %}science{% else %}commerce{% endif %}">
+                      {{ student.class_field }}
+                    </span>
+                  </td>
+                  <td class="text-muted">{{ student.city }}</td>
+                  <td class="text-center">
+                    <a href="{% url 'print_student' student.id %}" target="_blank" class="btn-action btn-view" title="Print Profile">
+                      <i class="fas fa-print"></i>
+                    </a>
+                    <a href="{% url 'edit_student' student.id %}" class="btn-action btn-edit" title="Edit Record">
+                      <i class="fas fa-edit"></i>
+                    </a>
+                    <a href="{% url 'delete_student' student.id %}" class="btn-action btn-delete" title="Delete Record" onclick="return confirm('Are you sure you want to delete this student?')">
+                      <i class="fas fa-trash"></i>
+                    </a>
+                  </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="7" class="text-center py-5">
+                        <i class="fas fa-search fa-3x text-muted mb-3 d-block"></i>
+                        <h5 class="text-muted">No student records found</h5>
+                    </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

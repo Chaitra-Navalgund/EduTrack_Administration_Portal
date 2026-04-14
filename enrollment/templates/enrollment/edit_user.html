@@ -1,0 +1,68 @@
+{% extends 'enrollment/base.html' %}
+{% load static %}
+
+{% block title %}Edit User - Admin Dashboard{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+  <div class="row">
+    <div class="col-md-3">
+      {% include 'enrollment/sidebar.html' %}
+    </div>
+    <div class="col-md-9">
+        <h1 class="text-primary"><i class="fas fa-user-edit"></i> Edit Admin User</h1>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Dashboard</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'all_admin' %}">All Admins</a></li>
+                <li class="breadcrumb-item active">Edit User</li>
+            </ol>
+        </nav>
+
+        {% if messages %}
+            {% for message in messages %}
+            <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}success{% endif %} alert-dismissible fade show">
+                {{ message }}
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+            </div>
+            {% endfor %}
+        {% endif %}
+
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="name">Full Name</label>
+                        <input type="text" name="name" class="form-control" id="name" value="{{ user_to_edit.name }}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" name="email" class="form-control" id="email" value="{{ user_to_edit.email }}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="status">Status</label>
+                        <select name="status" class="form-control" id="status" required>
+                            <option value="active" {% if user_to_edit.status == 'active' %}selected{% endif %}>Active</option>
+                            <option value="inactive" {% if user_to_edit.status == 'inactive' %}selected{% endif %}>Inactive</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="photo">Update Photo</label>
+                        <input type="file" name="photo" class="form-control-file" id="photo">
+                        {% if user_to_edit.photo %}
+                        <div class="mt-2">
+                            <img src="{% static 'images/' %}{{ user_to_edit.photo }}" height="60px" class="img-thumbnail">
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary px-5">Update User</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

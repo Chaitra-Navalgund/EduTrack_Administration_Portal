@@ -1,0 +1,316 @@
+{% extends 'enrollment/base.html' %}
+{% load static %}
+
+{% block title %}EduTrack - Modern Student Enrollment System{% endblock %}
+
+{% block extra_css %}
+      .hero-section {
+        background: linear-gradient(rgba(15, 23, 42, 0.8), rgba(15, 23, 42, 0.8)), url('https://images.unsplash.com/photo-1523050853064-dbad350c746d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+        background-size: cover;
+        background-position: center;
+        padding: 6rem 0 6rem 0;
+        color: white;
+        margin-bottom: -5rem;
+        clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+      }
+
+      .hero-content h1 {
+        font-size: 3.5rem;
+        font-weight: 800;
+        margin-bottom: 4rem;
+        letter-spacing: -1px;
+      }
+
+      .hero-content p {
+        font-size: 1.25rem;
+        opacity: 0.9;
+        max-width: 600px;
+        margin: 0 auto 1.5rem;
+      }
+
+      .search-card {
+        background: var(--glass);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid var(--glass-border);
+        border-radius: 24px;
+        box-shadow: var(--shadow);
+        padding: 2.5rem;
+        position: relative;
+        z-index: 10;
+        transform: translateY(-50px);
+        animation: fadeInUp 1s;
+      }
+
+      .search-card .card-header {
+        background: transparent;
+        border: none;
+        text-align: center;
+        margin-bottom: 2rem;
+      }
+
+      .search-card h3 {
+        font-weight: 700;
+        color: var(--primary);
+        margin-bottom: 0.5rem;
+      }
+
+      .form-control {
+        border-radius: 12px;
+        padding: 0.8rem 1.2rem;
+        border: 2px solid #e2e8f0;
+        background: white;
+        transition: var(--transition);
+      }
+
+      .form-control:focus {
+        border-color: var(--secondary);
+        box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+      }
+
+      .btn-search {
+        background: var(--primary);
+        color: white;
+        border-radius: 12px;
+        padding: 0.8rem 2rem;
+        font-weight: 600;
+        width: 100%;
+        transition: var(--transition);
+        border: none;
+      }
+
+      .btn-search:hover {
+        background: var(--secondary);
+        transform: translateY(-2px);
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+      }
+
+      .student-profile {
+        background: white;
+        border-radius: 30px;
+        overflow: hidden;
+        box-shadow: var(--shadow);
+        margin-top: 2rem;
+        animation: fadeIn 0.8s;
+        border: 1px solid rgba(0,0,0,0.05);
+      }
+
+      .profile-header {
+        background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+        padding: 2.5rem;
+        text-align: center;
+        position: relative;
+      }
+
+      .profile-img-container {
+        width: 150px;
+        height: 150px;
+        margin: 0 auto -75px;
+        border-radius: 50%;
+        padding: 5px;
+        background: white;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        position: relative;
+        z-index: 2;
+      }
+
+      .profile-img {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        object-fit: cover;
+      }
+
+      .profile-body {
+        padding: 90px 2.5rem 2.5rem;
+      }
+
+      .info-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.5rem;
+      }
+
+      .info-item {
+        padding: 1rem;
+        background: #f8fafc;
+        border-radius: 16px;
+        border: 1px solid #f1f5f9;
+        transition: var(--transition);
+      }
+
+      .info-item:hover {
+        background: white;
+        border-color: var(--secondary);
+        transform: translateY(-5px);
+      }
+
+      .info-label {
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: var(--text-muted);
+        margin-bottom: 0.3rem;
+        font-weight: 600;
+      }
+
+      .info-value {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: var(--primary);
+      }
+
+      .badge-academic {
+        background: var(--accent);
+        color: var(--primary);
+        font-weight: 700;
+        padding: 0.5rem 1rem;
+        border-radius: 50px;
+        font-size: 0.85rem;
+        position: absolute;
+        top: 20px;
+        right: 20px;
+      }
+
+      .btn-print {
+        background: var(--secondary);
+        color: white;
+        border-radius: 12px;
+        padding: 0.8rem 2rem;
+        font-weight: 600;
+        transition: var(--transition);
+        border: none;
+        display: inline-block;
+        margin-top: 2rem;
+      }
+
+      .btn-print:hover {
+        background: var(--primary);
+        text-decoration: none;
+        color: white;
+        transform: scale(1.05);
+      }
+
+      @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(-50px); }
+      }
+{% endblock %}
+
+{% block content %}
+    <!-- Hero Section -->
+    <section class="hero-section text-center">
+      <div class="container hero-content">
+        <h1 class="animate__animated animate__fadeInDown">Excellence in <span>Education</span></h1>
+        <p class="animate__animated animate__fadeInUp">The most advanced platform for student management and academic tracking. Find your profile and stay connected.</p>
+      </div>
+    </section>
+
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-6 offset-lg-3">
+          
+          {% if form_submitted %}
+          <div class="text-center mb-5" style="position: relative; z-index: 10; transform: translateY(-30px);">
+            <a href="?clear=true" class="btn btn-search" style="width: auto;">
+              <i class="fas fa-search mr-2"></i>Start New Search
+            </a>
+          </div>
+          {% else %}
+          <div class="search-card">
+            <div class="card-header">
+              <h3>Search Profile</h3>
+              <p class="text-muted">Enter your class and roll number</p>
+            </div>
+            <form method="POST" action="{% url 'index' %}">
+              {% csrf_token %}
+              <div class="form-group mb-4">
+                <label class="font-weight-600 mb-2" for="choose">Class Level</label>
+                <select class="form-control" name="choose" id="choose" required>
+                  <option value="" disabled selected>Select your class</option>
+                  <option value="1st Year Science">1st Year Science</option>
+                  <option value="2nd Year Science">2nd Year Science</option>
+                  <option value="1st Year Commerce">1st Year Commerce</option>
+                  <option value="2nd Year Commerce">2nd Year Commerce</option>
+                </select>
+              </div>
+              <div class="form-group mb-4">
+                <label class="font-weight-600 mb-2" for="roll">Roll Number</label>
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text bg-white border-right-0" style="border-radius: 12px 0 0 12px;"><i class="fas fa-id-card text-muted"></i></span>
+                  </div>
+                  <input class="form-control border-left-0" style="border-radius: 0 12px 12px 0;" type="text" pattern="[0-9]{6}" id="roll" placeholder="6-digit roll number" name="roll" required>
+                </div>
+              </div>
+              <button type="submit" name="showinfo" value="1" class="btn-search">
+                <i class="fas fa-search mr-2"></i>Verify Profile
+              </button>
+            </form>
+          </div>
+          {% endif %}
+
+          {% if messages %}
+            {% for message in messages %}
+              {% if message.tags == 'error' %}
+              <div class="alert alert-danger border-0 shadow-sm animate__animated animate__shakeX" style="border-radius: 12px;">
+                <i class="fas fa-exclamation-circle mr-2"></i> {{ message }}
+              </div>
+              {% endif %}
+            {% endfor %}
+          {% endif %}
+
+          {% if found and student %}
+          <div class="student-profile">
+            <div class="profile-header">
+              <span class="badge-academic">{{ student.class_field }}</span>
+              <h2 class="text-white mb-0 font-weight-700">Student Identity</h2>
+              <div class="profile-img-container">
+                <img class="profile-img" src="{% static 'images/' %}{{ student.photo }}" alt="{{ student.name }}">
+              </div>
+            </div>
+            <div class="profile-body">
+              <h3 class="text-center font-weight-800 mb-4">{{ student.name }}</h3>
+              
+              <div class="info-grid">
+                <div class="info-item text-center">
+                  <div class="info-label">Roll Number</div>
+                  <div class="info-value">#{{ student.roll }}</div>
+                </div>
+                <div class="info-item text-center">
+                  <div class="info-label">Current Class</div>
+                  <div class="info-value">{{ student.class_field }}</div>
+                </div>
+                <div class="info-item text-center">
+                  <div class="info-label">Location</div>
+                  <div class="info-value">{{ student.city }}</div>
+                </div>
+                <div class="info-item text-center">
+                  <div class="info-label">Enrolled On</div>
+                  <div class="info-value">{{ student.datetime|date:"M d, Y" }}</div>
+                </div>
+              </div>
+
+              <div class="text-center">
+                <a href="{% url 'print_student' student.id %}" target="_blank" class="btn-print">
+                  <i class="fas fa-print mr-2"></i>Generate Profile PDF
+                </a>
+              </div>
+            </div>
+          </div>
+          {% endif %}
+          
+        </div>
+      </div>
+    </div>
+{% endblock %}
+
+{% block extra_js %}
+    <script>
+      $(document).ready(function() {
+        $('form').on('submit', function() {
+          $(this).find('button').html('<i class="fas fa-spinner fa-spin mr-2"></i>Processing...');
+        });
+      });
+    </script>
+{% endblock %}

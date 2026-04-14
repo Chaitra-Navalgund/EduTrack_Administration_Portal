@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Print Payment Receipt - {{ payment.student.name }}</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body { background-color: white; color: black; }
+        .print-container { max-width: 800px; margin: 20px auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px; }
+        .header { text-align: center; margin-bottom: 30px; border-bottom: 2px solid #007bff; padding-bottom: 10px; }
+        .info-label { font-weight: bold; width: 180px; display: inline-block; }
+        .info-value { display: inline-block; }
+        .footer { margin-top: 50px; text-align: center; font-size: 0.9em; color: #666; border-top: 1px solid #ddd; padding-top: 10px; }
+        @media print {
+            .no-print { display: none; }
+            .print-container { border: none; margin: 0; padding: 0; width: 100%; max-width: none; }
+        }
+    </style>
+</head>
+<body onload="window.print()">
+    <div class="no-print text-center my-3">
+        <button class="btn btn-primary" onclick="window.print()">Print This Receipt</button>
+        <a class="btn btn-secondary" href="{% url 'all_payments' %}">Go Back to All Payments</a>
+        <a class="btn btn-info" href="{% url 'dashboard' %}">Dashboard</a>
+    </div>
+
+    <div class="print-container">
+        <div class="header">
+            <h4>Payment Receipt</h4>
+        </div>
+
+        <div class="row">
+            <div class="col-md-10 offset-md-1">
+                <div class="card mb-4 shadow-sm border-0">
+                    <div class="card-header bg-primary text-white rounded-top">
+                        <h5 class="mb-0 text-center">Payment Details</h5>
+                    </div>
+                    <div class="card-body border border-top-0 rounded-bottom">
+                        <div class="mb-3 border-bottom pb-2">
+                            <span class="info-label text-muted">Receipt No:</span>
+                            <span class="info-value font-weight-bold">#{{ payment.id|stringformat:"06d" }}</span>
+                        </div>
+                        <div class="mb-3 border-bottom pb-2">
+                            <span class="info-label text-muted">Student Name:</span>
+                            <span class="info-value">{{ payment.student.name }} (Roll: {{ payment.student.roll }})</span>
+                        </div>
+                        <div class="mb-3 border-bottom pb-2">
+                            <span class="info-label text-muted">Course/Year:</span>
+                            <span class="info-value">{{ payment.student.class_field }}</span>
+                        </div>
+                        <div class="mb-3 border-bottom pb-2">
+                            <span class="info-label text-muted">Payment Date:</span>
+                            <span class="info-value">{{ payment.payment_date|date:"d M Y" }}</span>
+                        </div>
+                        <div class="mb-3 border-bottom pb-2">
+                            <span class="info-label text-muted">Amount Paid:</span>
+                            <span class="info-value text-success font-weight-bold" style="font-size: 1.2rem;">${{ payment.amount }}</span>
+                        </div>
+                        <div class="mb-3 border-bottom pb-2">
+                            <span class="info-label text-muted">Payment Method:</span>
+                            <span class="info-value">{{ payment.payment_method }}</span>
+                        </div>
+                        {% if payment.reference_no %}
+                        <div class="mb-3 border-bottom pb-2">
+                            <span class="info-label text-muted">UTR Number:</span>
+                            <span class="info-value">{{ payment.reference_no }}</span>
+                        </div>
+                        {% endif %}
+                        {% if payment.remarks %}
+                        <div class="mb-3 border-bottom pb-2">
+                            <span class="info-label text-muted">Remarks:</span>
+                            <span class="info-value">{{ payment.remarks }}</span>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-5">
+             <div class="col-md-6 text-center">
+                 <p class="mb-4 text-muted">_____________________________</p>
+                 <p class="font-weight-bold">Student Signature</p>
+             </div>
+             <div class="col-md-6 text-center">
+                 <p class="mb-4 text-muted">_____________________________</p>
+                 <p class="font-weight-bold">Authorized Signature</p>
+             </div>
+        </div>
+
+        <div class="footer mt-4">
+            <p>Generated on {{ now|date:"d M Y, H:i" }} | Student Enrollment Management System</p>
+        </div>
+    </div>
+</body>
+</html>

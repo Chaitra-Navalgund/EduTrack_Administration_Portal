@@ -1,0 +1,171 @@
+{% extends 'enrollment/base.html' %}
+{% load static %}
+
+{% block title %}Update Record - EduTrack{% endblock %}
+
+{% block extra_css %}
+  .form-card {
+    border-radius: 24px;
+    border: none;
+    box-shadow: var(--shadow);
+    background: white;
+    padding: 2.5rem;
+    animation: fadeIn 0.8s;
+  }
+  
+  .form-header {
+    margin-bottom: 2rem;
+    text-align: center;
+  }
+  
+  .form-header h2 {
+    font-weight: 800;
+    color: var(--primary);
+    margin-bottom: 0.5rem;
+  }
+  
+  .form-group label {
+    font-weight: 600;
+    color: var(--text-main);
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+  }
+  
+  .form-group label i {
+    width: 20px;
+    margin-right: 8px;
+    color: var(--secondary);
+  }
+
+  .current-photo-wrapper {
+      position: relative;
+      display: inline-block;
+      margin-top: 10px;
+  }
+
+  .current-photo-img {
+      width: 100px;
+      height: 100px;
+      border-radius: 12px;
+      object-fit: cover;
+      border: 3px solid white;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  }
+
+  .photo-label {
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--primary);
+      color: white;
+      font-size: 0.6rem;
+      padding: 2px 8px;
+      border-radius: 4px;
+      white-space: nowrap;
+  }
+
+  .custom-file-upload {
+    border: 2px dashed #e2e8f0;
+    border-radius: 12px;
+    padding: 1.5rem;
+    text-align: center;
+    cursor: pointer;
+    transition: var(--transition);
+    display: block;
+    margin-top: 5px;
+  }
+
+  .custom-file-upload:hover {
+    border-color: var(--secondary);
+    background: #f8fafc;
+  }
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+  <div class="row">
+    <div class="col-lg-3">
+      {% include 'enrollment/sidebar.html' %}
+    </div>
+    <div class="col-lg-7 offset-lg-1">
+      
+      <div class="form-card">
+        <div class="form-header">
+            <h2 class="text-warning"><i class="fas fa-user-edit mr-2"></i>Edit Record</h2>
+            <p class="text-muted">Modify existing student information and credentials</p>
+        </div>
+        
+        <form enctype="multipart/form-data" method="POST" action="{% url 'edit_student' student.id %}">
+            {% csrf_token %}
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group mb-4">
+                        <label for="name"><i class="fas fa-user"></i> Full Name</label>
+                        <input name="name" type="text" class="form-control" id="name" value="{{ student.name }}" required>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group mb-4">
+                        <label for="roll"><i class="fas fa-id-badge"></i> Roll Number</label>
+                        <input name="roll" type="text" class="form-control" pattern="[0-9]{6}" id="roll" value="{{ student.roll }}" required>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group mb-4">
+                        <label for="class"><i class="fas fa-university"></i> Academic Class</label>
+                        <select name="class" class="form-control" id="class" required>
+                            <option value="1st Year Science" {% if student.class_field == '1st Year Science' %}selected{% endif %}>1st Year Science</option>
+                            <option value="2nd Year Science" {% if student.class_field == '2nd Year Science' %}selected{% endif %}>2nd Year Science</option>
+                            <option value="1st Year Commerce" {% if student.class_field == '1st Year Commerce' %}selected{% endif %}>1st Year Commerce</option>
+                            <option value="2nd Year Commerce" {% if student.class_field == '2nd Year Commerce' %}selected{% endif %}>2nd Year Commerce</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group mb-4">
+                        <label for="address"><i class="fas fa-map-marker-alt"></i> City / Region</label>
+                        <input name="address" type="text" class="form-control" id="address" value="{{ student.city }}" required>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="form-group mb-4">
+                        <label for="pcontact"><i class="fas fa-phone"></i> Parent Contact</label>
+                        <input name="pcontact" type="text" class="form-control" id="pcontact" pattern="01[5|6|7|8|9][0-9]{8}" value="{{ student.pcontact }}" required>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="form-group mb-4">
+                        <label><i class="fas fa-camera"></i> Student Photograph</label>
+                        <div class="d-flex align-items-center">
+                            {% if student.photo %}
+                            <div class="current-photo-wrapper mr-4">
+                                <img src="{% static 'images/' %}{{ student.photo }}" class="current-photo-img" alt="Current">
+                                <span class="photo-label">Current Photo</span>
+                            </div>
+                            {% endif %}
+                            <div class="flex-grow-1">
+                                <label for="photo" class="custom-file-upload">
+                                    <i class="fas fa-sync-alt mr-2 text-muted"></i>
+                                    <span id="file-name" class="small font-weight-600">Replace existing photo</span>
+                                </label>
+                                <input name="photo" type="file" id="photo" style="display:none;" onchange="document.getElementById('file-name').innerHTML = this.files[0].name">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center mt-4">
+                <button type="submit" class="btn btn-warning px-5 btn-block py-3 font-weight-700">
+                    <i class="fas fa-save mr-2"></i> Update Records
+                </button>
+                <a href="{% url 'all_students' %}" class="btn btn-link mt-2 text-muted small">Cancel and Return</a>
+            </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

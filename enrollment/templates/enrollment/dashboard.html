@@ -1,0 +1,222 @@
+{% extends 'enrollment/base.html' %}
+{% load static %}
+
+{% block title %}Admin Dashboard - EduTrack{% endblock %}
+
+{% block extra_css %}
+  .dashboard-header {
+    margin-bottom: 2.5rem;
+  }
+  
+  .dashboard-header h1 {
+    font-weight: 800;
+    color: var(--primary);
+    margin-bottom: 0.5rem;
+    letter-spacing: -1px;
+  }
+  
+  .breadcrumb {
+    background: transparent;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .breadcrumb-item.active {
+    color: var(--secondary);
+    font-weight: 600;
+  }
+  
+  .stat-card {
+    border-radius: 24px;
+    border: 1px solid var(--glass-border);
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+    transition: var(--transition);
+    height: 100%;
+    color: white;
+  }
+  
+  .stat-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow);
+  }
+  
+  .stat-card.students {
+    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+  }
+  
+  .stat-card.admins {
+    background: linear-gradient(135deg, #10b981 0%, #047857 100%);
+  }
+  
+  .stat-card.profile {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+  }
+  
+  .stat-icon {
+    font-size: 3rem;
+    opacity: 0.2;
+    position: absolute;
+    right: 20px;
+    bottom: 20px;
+  }
+  
+  .stat-value {
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin-bottom: 0.2rem;
+  }
+  
+  .stat-label {
+    font-weight: 500;
+    opacity: 0.9;
+    font-size: 1.1rem;
+  }
+  
+  .stat-link {
+    display: inline-block;
+    margin-top: 1.5rem;
+    color: white;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-decoration: none;
+    padding-bottom: 2px;
+    border-bottom: 2px solid rgba(255,255,255,0.3);
+    transition: var(--transition);
+  }
+  
+  .stat-link:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+    text-decoration: none;
+    padding-right: 10px;
+  }
+  
+  .profile-mini {
+    display: flex;
+    align-items: center;
+  }
+  
+  .profile-mini img {
+    width: 65px;
+    height: 65px;
+    border-radius: 18px;
+    object-fit: cover;
+    border: 3px solid rgba(255,255,255,0.2);
+    margin-right: 15px;
+  }
+  
+  .admin-badge {
+    background: var(--accent);
+    color: var(--primary);
+    font-size: 0.7rem;
+    font-weight: 800;
+    padding: 2px 8px;
+    border-radius: 6px;
+    text-transform: uppercase;
+  }
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+  <div class="row">
+    <div class="col-lg-3">
+      {% include 'enrollment/sidebar.html' %}
+      
+      <!-- Quick Activity Card -->
+      <div class="card border-0 shadow-sm mt-4" style="border-radius: 20px;">
+        <div class="card-body p-4">
+          <h6 class="font-weight-700 mb-4 text-muted">SYSTEM STATUS</h6>
+          <div class="d-flex align-items-center mb-3">
+            <div class="bg-success rounded-circle mr-2" style="width: 10px; height: 10px;"></div>
+            <span class="small font-weight-600">All Modules Active</span>
+          </div>
+          <p class="small text-muted mb-0">System last updated 5 minutes ago. All database connections are stable.</p>
+        </div>
+      </div>
+    </div>
+    
+    <div class="col-lg-9">
+      <div class="dashboard-header animate__animated animate__fadeIn">
+        <h1>Dashboard Overview</h1> 
+        <nav aria-label="breadcrumb">   
+          <ol class="breadcrumb">      
+            <li class="breadcrumb-item"><i class="fas fa-home mr-1"></i> Admin Console</li>
+            <li class="breadcrumb-item active" aria-current="page">Control Panel</li>   
+          </ol> 
+        </nav>
+      </div>
+
+      <div class="row">   
+        <!-- Students Card -->
+        <div class="col-md-4 mb-4 mb-md-0 animate__animated animate__fadeInUp" style="animation-delay: 0.1s;">      
+          <div class="stat-card students">
+            <div class="stat-value">{{ total_students }}</div>
+            <div class="stat-label">Total Enrollments</div>
+            <i class="fas fa-user-graduate stat-icon"></i>
+            <a href="{% url 'all_students' %}" class="stat-link">Manage Records <i class="fas fa-arrow-right ml-1"></i></a>
+          </div>   
+        </div>
+         
+        <!-- Admins Card -->
+        <div class="col-md-4 mb-4 mb-md-0 animate__animated animate__fadeInUp" style="animation-delay: 0.2s;">      
+          <div class="stat-card admins">
+            <div class="stat-value">{{ total_admin }}</div>
+            <div class="stat-label">System Admins</div>
+            <i class="fas fa-user-shield stat-icon"></i>
+            <a href="{% url 'all_admin' %}" class="stat-link">Access Control <i class="fas fa-arrow-right ml-1"></i></a>
+          </div>   
+        </div>
+         
+        <!-- Profile Card -->
+        <div class="col-md-4 animate__animated animate__fadeInUp" style="animation-delay: 0.3s;">      
+          <div class="stat-card profile">
+            <div class="profile-mini mb-3">
+              <img src="{% static 'images/' %}{{ user.photo }}" alt="Admin Profile">             
+              <div>
+                <div class="admin-badge mb-1">Super Admin</div>
+                <div class="h5 font-weight-700 mb-0 text-white">{{ user.name }}</div>
+              </div>
+            </div>
+            <i class="fas fa-id-badge stat-icon"></i>
+            <a href="{% url 'admin_profile' %}" class="stat-link">Edit Security Settings <i class="fas fa-arrow-right ml-1"></i></a>     
+          </div>   
+        </div>   
+      </div> 
+
+      <!-- Recent Trends / Stats Placeholder -->
+      <div class="row mt-5 animate__animated animate__fadeIn" style="animation-delay: 0.4s;">
+        <div class="col-12">
+          <div class="card border-0 shadow-sm" style="border-radius: 24px;">
+            <div class="card-body p-4">
+              <div class="d-flex justify-content-between align-items-center mb-4">
+                <h5 class="font-weight-700 mb-0">Academic Distribution</h5>
+                <button class="btn btn-sm btn-light border" style="border-radius: 10px;">Download Report</button>
+              </div>
+              <div class="row text-center py-3">
+                <div class="col-3">
+                  <h4 class="font-weight-800 text-primary">45%</h4>
+                  <span class="small text-muted font-weight-600">Science</span>
+                </div>
+                <div class="col-3" style="border-left: 1px solid #f1f5f9;">
+                  <h4 class="font-weight-800 text-info">35%</h4>
+                  <span class="small text-muted font-weight-600">Commerce</span>
+                </div>
+                <div class="col-3" style="border-left: 1px solid #f1f5f9;">
+                  <h4 class="font-weight-800 text-warning">15%</h4>
+                  <span class="small text-muted font-weight-600">Arts</span>
+                </div>
+                <div class="col-3" style="border-left: 1px solid #f1f5f9;">
+                  <h4 class="font-weight-800 text-success">5%</h4>
+                  <span class="small text-muted font-weight-600">Vocational</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
