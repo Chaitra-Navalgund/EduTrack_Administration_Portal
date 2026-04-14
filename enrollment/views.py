@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
+from django.conf import settings
 import hashlib
 from .models import StudentInfo, Users, Payment
 
@@ -115,7 +116,7 @@ def add_student(request):
             ext = photo_file.name.split('.')[-1]
             # mimic PHP: $roll.date('Y-m-d-m-s').'.'.$photo;
             filename = f"{roll}{datetime.now().strftime('%Y-%m-%d-%m-%S')}.{ext}"
-            fs = FileSystemStorage(location=os.path.join(request.site.settings.BASE_DIR if hasattr(request, 'site') else 'static', 'images'))
+            fs = FileSystemStorage(location=settings.MEDIA_ROOT)
             fs.save(filename, photo_file)
             photo_name = filename
         else:
@@ -159,7 +160,7 @@ def edit_student(request, id):
         if photo_file:
             ext = photo_file.name.split('.')[-1]
             filename = f"{student.roll}{datetime.now().strftime('%Y-%m-%d-%m-%S')}.{ext}"
-            fs = FileSystemStorage() # defaults to MEDIA_ROOT
+            fs = FileSystemStorage(location=settings.MEDIA_ROOT)
             fs.save(filename, photo_file)
             student.photo = filename
 
@@ -287,7 +288,7 @@ def admin_profile(request):
         if photo_file:
             ext = photo_file.name.split('.')[-1]
             filename = f"admin_{user.username}_{datetime.now().strftime('%Y%m%d%H%M%S')}.{ext}"
-            fs = FileSystemStorage(location=os.path.join(request.site.settings.BASE_DIR if hasattr(request, 'site') else 'static', 'images'))
+            fs = FileSystemStorage(location=settings.MEDIA_ROOT)
             fs.save(filename, photo_file)
             user.photo = filename
             
@@ -326,7 +327,7 @@ def register(request):
                 ext = photo.name.split('.')[-1]
                 photo_name = f"{username}.{ext}"
                 
-                fs = FileSystemStorage(location=os.path.join(os.path.dirname(os.path.dirname(__file__)), 'static', 'images'))
+                fs = FileSystemStorage(location=settings.MEDIA_ROOT)
                 fs.save(photo_name, photo)
                 
                 Users.objects.create(
@@ -361,7 +362,7 @@ def edit_user(request, id):
         if photo_file:
             ext = photo_file.name.split('.')[-1]
             photo_name = f"{user.username}_{datetime.now().strftime('%Y%m%d%H%M%S')}.{ext}"
-            fs = FileSystemStorage(location=os.path.join(os.path.dirname(os.path.dirname(__file__)), 'static', 'images'))
+            fs = FileSystemStorage(location=settings.MEDIA_ROOT)
             fs.save(photo_name, photo_file)
             user.photo = photo_name
             

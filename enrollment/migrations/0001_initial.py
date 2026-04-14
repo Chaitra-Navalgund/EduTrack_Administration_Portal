@@ -24,7 +24,7 @@ class Migration(migrations.Migration):
             ],
             options={
                 'db_table': 'payment',
-                'managed': False,
+                'managed': True,
             },
         ),
         migrations.CreateModel(
@@ -41,7 +41,7 @@ class Migration(migrations.Migration):
             ],
             options={
                 'db_table': 'student_info',
-                'managed': False,
+                'managed': True,
             },
         ),
         migrations.CreateModel(
@@ -58,7 +58,7 @@ class Migration(migrations.Migration):
             ],
             options={
                 'db_table': 'users',
-                'managed': False,
+                'managed': True,
             },
         ),
     ]

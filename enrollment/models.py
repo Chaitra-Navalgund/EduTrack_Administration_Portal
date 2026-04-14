@@ -18,7 +18,7 @@ class Payment(models.Model):
     datetime = models.DateTimeField()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'payment'
 
 
@@ -32,7 +32,7 @@ class StudentInfo(models.Model):
     datetime = models.DateTimeField()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'student_info'
 
 
@@ -46,5 +46,5 @@ class Users(models.Model):
     datetime = models.DateTimeField()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'users'
