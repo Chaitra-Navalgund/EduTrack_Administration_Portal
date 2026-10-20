@@ -39,8 +39,12 @@ def admin_login(request):
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
-        
-        user = Users.objects.filter(username=username).first()
+
+        try:
+           user = Users.objects.filter(username=username).first()
+        except Exception:
+           logger.exception("Error looking up admin user in database")
+           raise
         if user:
             # Check passwords against multiple hashing methods implemented in PHP legacy
             plain = password
