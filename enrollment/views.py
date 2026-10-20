@@ -1,3 +1,7 @@
+import logging
+
+logger = logging.getLogger(__name__)
+
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.conf import settings
