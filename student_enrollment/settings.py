@@ -18,12 +18,13 @@ DEBUG = os.getenv("DJANGO_DEBUG", "False").lower() == "true"
 ALLOWED_HOSTS = [
     "localhost",
     "127.0.0.1",
-    ".vercel.app",
-]
+    "edu-track-administration-portal-o9p-black.vercel.app",
+    "edu-track-administration-portal-o9pu-3vtccqvht.vercel.app",
 ]
 
 CSRF_TRUSTED_ORIGINS = [
-    "https://*.vercel.app",
+    "https://edu-track-administration-portal-o9p-black.vercel.app",
+    "https://edu-track-administration-portal-o9pu-3vtccqvht.vercel.app",
 ]
 
 
